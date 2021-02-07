@@ -4,21 +4,21 @@ module.exports = {
   development: {
     username: "root",
     password: "test",
-    database: "database_development",
+    database: "library_development",
     host: "localhost",
     dialect: "mysql"
   },
   test: {
     username: "root",
     password: "test",
-    database: "database_test",
+    database: "library_test",
     host: "localhost",
     dialect: "mysql"
   },
   production: {
     username: "root",
     password: "test",
-    database: "database_library",
+    database: "library-production",
     host: "localhost",
     dialect: "mysql"
   }

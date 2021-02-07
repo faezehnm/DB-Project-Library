@@ -10,7 +10,10 @@ module.exports = {
         references: {
           model: 'Accounts',
           key: 'id'
-        }
+        },
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
       },
       studentNumber: Sequelize.STRING,
       university: Sequelize.STRING,

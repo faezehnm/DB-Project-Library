@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    categoryId: DataTypes.STRING
+    categoryId: DataTypes.INTEGER,
+    bookId: DataTypes.INTEGER
   })
 
     BookCategory.associate = models => {
