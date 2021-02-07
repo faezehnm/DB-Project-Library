@@ -1,0 +1,16 @@
+node_modules
+node_modules/*
+.idea
+.vscode
+debug.log
+npm-debug.log
+.vscode
+.vscode/settings.json
+public/uploads/music/recived
+./public/uploa/music/recived
+public/uploads/photo/recived
+./public/uploa/photo/recived
+yarn.lock
+yarn-error.log
+.env
+package-lock.json
