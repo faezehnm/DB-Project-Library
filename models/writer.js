@@ -11,5 +11,5 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING
   })
 
-  return BookWriter
+  return Writer
 }
