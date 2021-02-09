@@ -11,10 +11,13 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.7",
     "prompt-sync": "^4.2.0",
     "readline": "^1.3.0",
-    "sequelize": "^6.5.0"
+    "sequelize": "^6.5.0",
+    "sequelize-auto": "^0.7.10",
+    "sequelize-cli": "^6.2.0"
   }
 }

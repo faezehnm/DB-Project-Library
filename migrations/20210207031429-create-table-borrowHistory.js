@@ -31,6 +31,7 @@ module.exports = {
       returnDate: Sequelize.DATE ,
       deadLine: Sequelize.DATE,
       price: Sequelize.FLOAT,
+      status: Sequelize.STRING,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

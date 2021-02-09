@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     getDate: DataTypes.DATE ,
     returnDate: DataTypes.DATE ,
     deadLine: DataTypes.DATE,
-    price: DataTypes.FLOAT
+    price: DataTypes.FLOAT,
+    status: DataTypes.STRING,
   })
   
     BorrowHistory.associate = models => {

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     stock: DataTypes.FLOAT,
     fname: DataTypes.STRING,
     lname: DataTypes.STRING,
-    type: DataTypes.ENUM('usual', 'studnet', 'teacher', 'manager', 'librarian'),
+    type: DataTypes.STRING,
     nationalId: DataTypes.STRING,
     phone: DataTypes.STRING,
     address: DataTypes.TEXT
