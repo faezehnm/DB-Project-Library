@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     username: DataTypes.STRING,
     password: DataTypes.STRING,
-    createdAt:DataTypes.DATE ,
+    createdAt:{ type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     stock: DataTypes.FLOAT,
     fname: DataTypes.STRING,
     lname: DataTypes.STRING,
