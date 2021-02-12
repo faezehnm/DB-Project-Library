@@ -29,6 +29,47 @@ con.connect(function(err) {
     // console.log("database Connected!");
 })
 
+const signup = data=> {
+    
+    let sql = `CALL signup(?,?,?,?,?,?,?,?,?,@output); SELECT @output`
+    // const data = ['sahari2i', 'test1234', 30.33 , 'sahar', 'naeimi', 'student', '0521254140', '09395363672', 'iran-arak']
+    con.query(sql,
+        data,
+        (error, results,fields ) => {
+            if (error) {
+                return console.error(error.message);
+            }
+            const message = JSON.parse(JSON.stringify(results[1]));
+            const outMessage = Object.values(message[0])[0]
+            console.log( outMessage )
+
+            if ( outMessage === 'USERNAME is taken!!') console.log('plesae choose another username.')
+            if ( outMessage === 'USERNAME length is not enough!!') console.log('username length shold be more than 6.')
+            if ( outMessage === 'PASSWORD length is not enough!!') console.log('password length shold be more than 8.')
+            if ( outMessage === 'PASSWORD is easy!!') console.log('it should has bothcharachter and digit.')
+            if ( outMessage === 'register successFull') console.log('now you can log in!')
+        })
+}
+
+const currentUserType = async () => {
+    let type = null
+
+    let sql = `CALL currentUserType(@output); SELECT @output; `
+   
+    await con.query(sql,
+        [],
+        (error, results,fields ) => {
+            if (error) {
+                return console.error(error.message);
+            }
+            const message = JSON.parse(JSON.stringify(results[1]));
+            const outMessage = Object.values(message[0])[0]
+            // console.log( outMessage )
+            type = outMessage
+        })
+    return(type)
+}
+
 const searchBook = data => {
     let sql = `CALL searchBook(?)`
     // const data = ['sahari2i', 'test1234', 30.33 , 'sahar', 'naeimi', 'student', '0521254140', '09395363672', 'iran-arak']
@@ -99,29 +140,7 @@ const returnBook = data => {
         })
 }
 
-const increseStock = data => {
-    let sql = `CALL increaseStock(?,@output); SELECT @output;`
-    
-    con.query(sql,
-        data,
-        (error, results,fields ) => {
-            if (error) {
-                return console.error(error.message);
-            }
-
-            const message = JSON.parse(JSON.stringify(results[1]));
-            const outMessage = Object.values(message[0])[0]
-            console.log( outMessage )
-
-            if ( outMessage === 'please entre valid price!!') {
-                rl.question("price: ", function(price) {
-                    increseStock([price])
-                })  
-            }
-        })
-}
-
-const handleAction = action =>{
+const handleUserAction = action =>{
     if(action === '1' ) {
         getUserInfo()
     }
@@ -151,10 +170,22 @@ const handleAction = action =>{
     }
 }
 
-const signup = data=> {
+const userPortal = data => {
+    console.log('welcome to portal.')
+    console.log('1) user information \n')
+    console.log('2) borrow book \n')
+    console.log('3) search book \n')
+    console.log('4) return book \n')
+    console.log('5) increase stock \n')
+
+    rl.question("choose your action : ", function(action) {
+        handleUserAction(action)
+    })
+}
+
+const increseBook = data => {
+    let sql = `CALL increaseBook(?,?,?,?,?,?,?,?,?,?,?,@output); SELECT @output;`
     
-    let sql = `CALL signup(?,?,?,?,?,?,?,?,?,@output); SELECT @output`
-    // const data = ['sahari2i', 'test1234', 30.33 , 'sahar', 'naeimi', 'student', '0521254140', '09395363672', 'iran-arak']
     con.query(sql,
         data,
         (error, results,fields ) => {
@@ -165,17 +196,132 @@ const signup = data=> {
             const outMessage = Object.values(message[0])[0]
             console.log( outMessage )
 
-            if ( outMessage === 'USERNAME is taken!!') console.log('plesae choose another username.')
-            if ( outMessage === 'USERNAME length is not enough!!') console.log('username length shold be more than 6.')
-            if ( outMessage === 'PASSWORD length is not enough!!') console.log('password length shold be more than 8.')
-            if ( outMessage === 'PASSWORD is easy!!') console.log('it should has bothcharachter and digit.')
-            if ( outMessage === 'register successFull') console.log('now you can log in!')
         })
+}
+
+const seeRequest = data => {
+    let sql = `CALL seeRequest(?,@output); SELECT @output;`
+    
+    con.query(sql,
+        data,
+        (error, results,fields ) => {
+            if (error) {
+                return console.error(error.message);
+            }
+
+            console.log( results[0] )
+
+        })
+}
+
+const searchUser = data => {
+    let sql = `CALL searchUser(?,?,@output); SELECT @output;`
+    
+    con.query(sql,
+        data,
+        (error, results,fields ) => {
+            if (error) {
+                return console.error(error.message);
+            }
+
+            console.log(results[0])
+        })
+}
+
+const seeUserTotalInfo = data => {
+    let sql = `CALL seeUserTotalInfo(?, @output); SELECT @output;`
+    
+    con.query(sql,
+        data,
+        (error, results,fields ) => {
+            if (error) {
+                return console.error(error.message);
+            }
+
+            console.log(results[0])
+
+        })
+}
+
+const deleteAccount = data => {
+    let sql = `CALL deleteAccount(?,@output); SELECT @output;`
+    
+    con.query(sql,
+        data,
+        (error, results,fields ) => {
+            if (error) {
+                return console.error(error.message);
+            }
+
+            const message = JSON.parse(JSON.stringify(results[1]));
+            const outMessage = Object.values(message[0])[0]
+  
+            if( outMessage === 'you have access!!') console.log('delete account successfully')
+
+        })
+}
+
+const handleAdminAction = action =>{
+    if(action === '1' ) {
+        rl.question("bookId: ", function(bookId) {
+        rl.question("num: ", function(num) {
+        rl.question("title: ", function(title) {
+        rl.question("writer: ", function(writer) {
+        rl.question("publisher: ", function(publisher) {
+        rl.question("category: ", function(category) {
+        rl.question("page: ", function(page) {
+        rl.question("price: ", function(price) {
+        rl.question("section: ", function(section) {
+        rl.question("tiraj: ", function(tiraj) {
+        rl.question("publish date: ", function(publishDate) {
+            increseBook([bookId, num, title, writer, publisher, category, page, price, section, tiraj, publishDate])  
+        }) })})})}) })})}) }) })})
+    }
+
+    if(action === '2' ) {
+        rl.question("page: ", function(page) {
+            seeRequest([page])
+        }) 
+    }
+
+    if(action === '3' ) {
+        rl.question("user name or fimily name: ", function(name) {
+            rl.question("page: ", function(page) {
+                searchUser([name,page])
+            }) 
+        }) 
+    }
+
+    if(action === '4' ) {
+        rl.question("username: ", function(username) {
+            seeUserTotalInfo([username])
+        }) 
+    }
+
+    if(action === '5' ) {
+        rl.question("username: ", function(username) {
+            deleteAccount([username])
+        }) 
+      
+    }
+}
+
+const adminPortal = data => {
+    console.log('welcome to portal.')
+    console.log('1) increase book \n')
+    console.log('2) success borrow history \n')
+    console.log('3) search user \n')
+    console.log('4) user history \n')
+    console.log('5) delete account \n')
+
+    rl.question("choose your action : ", function(action) {
+        handleAdminAction(action)
+    })
 }
 
 const login = data=> {
     let sql = `CALL login(?,?,@output); SELECT @output`
-    // const data = ['faezeh_nm', 'faezeh123']
+
     con.query(sql,
         data,
         (error, results,fields ) => {
@@ -196,22 +342,14 @@ const login = data=> {
             }
 
             if ( outMessage === 'LOGIN successful') { 
-                console.log('welcome to portal.')
-                console.log('1) user information \n')
-                console.log('2) borrow book \n')
-                console.log('3) search book \n')
-                console.log('4) return book \n')
-                console.log('5) increase stock \n')
-
-                rl.question("choose your action : ", function(action) {
-                    handleAction(action)
-                })
- 
-
+                // userPortal()
+                adminPortal()
             }
         
         })
 }
+
+
 
 // getUserInfo()
 // login()
@@ -219,45 +357,59 @@ const login = data=> {
 // searchBook(['expensive'])
 // returnBook([2])
 // increseStock([-2])
+// seeUserTotalInfo(['faezeh_nm'])
+// searchUser(['naeimi', '0'])
+// seeRequest([0])
+// increseBook(["","30","backbook","","","", "", "", "", "", ""])
+
+// const show = async ()=>{
+//     const type = await currentUserType()
+//     console.log('-----')
+//     console.log(type)
+// }
+
+// show()
+
+
 
 
 const wellcomStr = 'wellcome to the Library platForm!\n1)Login\n2)signup\n'
 
-// rl.question(wellcomStr, function(choose) {
-//     if(choose==='2' || choose==='signup' || choose==='Sginup') {
-//         rl.question("Whats your name? ", function(fname) {
-//             rl.question("Whats your family name? ", function(lname) {
-//                 rl.question("Whats your nationalId? ", function(nationalId) {
-//                     rl.question("Whats your phoneNumber? ", function(phone) {
-//                         rl.question("Whats your address? ", function(address) {
-//                             rl.question("choose a unique username: ", function(userName) {
-//                             rl.question("choose a password: ", function(password) {
-//                                     rl.question("say your job", function(type) {
+rl.question(wellcomStr, function(choose) {
+    if(choose==='2' || choose==='signup' || choose==='Sginup') {
+        rl.question("Whats your name? ", function(fname) {
+            rl.question("Whats your family name? ", function(lname) {
+                rl.question("Whats your nationalId? ", function(nationalId) {
+                    rl.question("Whats your phoneNumber? ", function(phone) {
+                        rl.question("Whats your address? ", function(address) {
+                            rl.question("choose a unique username: ", function(userName) {
+                            rl.question("choose a password: ", function(password) {
+                                    rl.question("say your job", function(type) {
                                         
-//                                         signup([userName, password, 0, fname, lname, type, nationalId, phone, address])
-//                                         // rl.close()       
-//                                 }
-//                                 )
-//                             }
+                                        signup([userName, password, 0, fname, lname, type, nationalId, phone, address])
+                                        // rl.close()       
+                                }
+                                )
+                            }
                                 
-//                             )})
-//                         })
-//                     })
-//                 })
-//             })
+                            )})
+                        })
+                    })
+                })
+            })
            
-//         });
-//     }
-//     if(choose==='1' || choose==='login' || choose==='Login') {
-//         rl.question("username: " , function(username) {
-//             rl.question("password: ", function(password) {
-//                 login([username, password])
-//                 // rl.close();
-//             })
+        });
+    }
+    if(choose==='1' || choose==='login' || choose==='Login') {
+        rl.question("username: " , function(username) {
+            rl.question("password: ", function(password) {
+                login([username, password])
+                // rl.close();
+            })
            
-//         });
-//     }
-// });
+        });
+    }
+});
 
 
 
